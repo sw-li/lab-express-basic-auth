@@ -76,7 +76,7 @@ User.findOne({username})
 router.post("/logout", (req,res)=>{
     req.session.destroy(error => {
         if(error) next(error)
-        res.redirect("/login")
+        res.redirect("login")
     })
 })
 module.exports = router;

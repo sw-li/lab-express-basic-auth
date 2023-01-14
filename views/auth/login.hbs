@@ -1,25 +1,23 @@
 {{!-- views/auth/login.hbs --}}
 
 <div id="form">
-  <h2>Log in</h2>
   <form action="/login" method="POST">
-
-    <label> Username
-      <input type="text" name="username" placeholder="ironhacker" value="{{username}}" required/>
-    </label>
-
-    <label> Password
-      <input type="password" name="password" placeholder="********" value="" required />
-    </label>
-
-    <button type="submit" class="btn btn-success">let's go</button>
-
-    {{!-- error message will be added here --}}
-    <div>
-    {{#if errorMessage}}
-      <h6 class="text-danger">{{errorMessage}}</h6>
-    {{/if}}
+    <div class="form-group">
+      <label> Username</label>
+      <input type="text" name="username" class="form-control" placeholder="ironhacker" value="{{username}}" required />
     </div>
 
+    <div class="form-group">
+      <label> Password </label>
+      <input type="password" name="password" class="form-control" placeholder="********" value="" required />
+    </div>
+    <br>
+    {{!-- error message will be added here --}}
+    <div class="form-group">
+      <button type="submit" class="btn btn-success">let's go</button>
+      {{#if errorMessage}}
+      <h6 class="text-danger">{{errorMessage}}</h6>
+      {{/if}}
+    </div>
   </form>
 </div>
