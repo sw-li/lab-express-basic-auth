@@ -2,21 +2,23 @@
 
 <div id="form">
   <h2>Signup</h2>
-  <form action="/signup" method="POST" >
+  <form action="/signup" method="POST">
 
     <label> Username
-      <input type="text" name="username" placeholder="ironhacker" required/>
+      <input type="text" name="username" placeholder="ironhacker" value="{{username}}" required />
     </label>
 
     <label> Password
-      <input type="password" name="password" placeholder="********" required/>
+      <input type="password" name="password" placeholder="********" value="{{password}}" required />
     </label>
 
-    <button type="submit">Create account</button>
+    <button type="submit" class="btn btn-success">Create account</button>
 
     {{!-- error message will be added here --}}
-    {{#if errorMessage}}
-      <h2>{{errorMessage}}</h2>
-    {{/if}}
   </form>
+  <div>
+    {{#if errorMessage}}
+    <h6 class="text-danger">{{errorMessage}}</h6>
+    {{/if}}
+  </div>
 </div>

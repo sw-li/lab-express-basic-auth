@@ -2,21 +2,25 @@ const User = require("../models/User.model")
 const router = require("express").Router()
 const bcrypt = require("bcryptjs")
 const saltRounds = 10
-
+const mongoose = require("mongoose")
 
 
 // GET route ==> to display the signup form to users
 router.get('/signup', (req, res) => res.render('auth/signup'));
 router.get('/login', (req, res) => res.render('auth/login'));
+router.get('/profile',  (req, res) => res.render('user/user-profile',{userInSection:req.session.currentUser}))
 // POST route ==> to process form data
 
 //signup post bcrypt
-
 router.post("/signup", (req,res)=> {
-    const {name,password}=req.body
-
-    if(!name || !password){
+    const {username,password}=req.body
+    const regex = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}/;
+    //email and password client inputs validation
+    if(!username || !password){
         res.render("auth/signup", {errorMessage: "You have to fill both fields"})
+        return
+    }else if(!regex.test(password)){
+        res.render("auth/signup", {username, password, errorMessage:"The password has to have minimum 6 characters with at least one lower case and one upper case letter"})
         return
     }
 
@@ -24,12 +28,45 @@ router.post("/signup", (req,res)=> {
     .genSalt(saltRounds)
     .then(salt => bcrypt.hash(password, salt))
     .then(hashedPassword =>{
-        console.log(`Password hash:${hashedPassword}`)
-        return User.create({name,password:hashedPassword})
+        return User.create({username,password:hashedPassword})
     })
-    .then(()=>res.redirect("user"))
-    .catch(err=> next(err))
+    .then(result =>{
+        console.log(result)
+/*         req.session.currentUser = result */
+        res.redirect("/profile")})
+    .catch(error=>{
+        if(error instanceof mongoose.Error.ValidationError){
+            res.status(500).render('auth/signup',{errorMessage: error.message})
+        }else if(error.code = 11000){
+            res.render("auth/signup", {errorMessage: "There is already an account associated with this email, Log in instead"})
+        }else{
+            next(error)
+        }
+            console.log(error)
+})})
+
+router.post("/login", (req,res)=>{
+
+const {username, password} = req.body
+if(!username || !password){
+    res.render("auth/login", {errorMessage: "Please provide both username and password!"})
+}
+
+User.findOne({username})
+.then(user => {
+    if(!user){
+        
+    }else if(){
+
+    }else{
+
+    }
 })
 
+})
+
+router.post("/logout", (req,res)=>{
+    
+})
 module.exports = router;
 
