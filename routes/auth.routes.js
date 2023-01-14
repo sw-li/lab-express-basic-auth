@@ -14,12 +14,18 @@ router.get('/login', (req, res) => res.render('auth/login'));
 
 router.post("/signup", (req,res)=> {
     const {name,password}=req.body
+
+    if(!name || !password){
+        res.render("auth/signup", {errorMessage: "You have to fill both fields"})
+        return
+    }
+
     bcrypt
     .genSalt(saltRounds)
     .then(salt => bcrypt.hash(password, salt))
     .then(hashedPassword =>{
         console.log(`Password hash:${hashedPassword}`)
-        User.create({name,password:hashedPassword})
+        return User.create({name,password:hashedPassword})
     })
     .then(()=>res.redirect("user"))
     .catch(err=> next(err))

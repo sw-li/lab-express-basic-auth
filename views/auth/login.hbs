@@ -5,15 +5,18 @@
   <form action="/signup" method="POST">
 
     <label> Username
-      <input type="text" name="username" placeholder="ironhacker" />
+      <input type="text" name="username" placeholder="ironhacker" required/>
     </label>
 
     <label> Password
-      <input type="password" name="password" placeholder="********" />
+      <input type="password" name="password" placeholder="********" required/>
     </label>
 
     <button type="submit">let's go</button>
 
     {{!-- error message will be added here --}}
+    {{#if errorMessage}}
+      <h2>{{errorMessage}}</h2>
+    {{/if}}
   </form>
 </div>
