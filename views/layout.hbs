@@ -15,7 +15,11 @@
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav nav-tabs">
         <li class="nav-item">
-          <a class="nav-link" href="/">Home</a>
+          {{#if userInSession}}
+          <a class="nav-link" href="/main">Home</a>
+          {{else}}
+          <a class="nav-link" href="/main">Home</a>
+          {{/if}}
         </li>
         <li class="nav-item">
           <a class="nav-link" href="/signup">Signup</a>
@@ -27,6 +31,13 @@
           <form action="/logout" method="post">
            <button type="submit" class="nav-link text-danger" >Log out</button>
           </form>
+        </li>
+        <li class="nav-item">
+          {{#if userInSession}}
+          <a class="nav-link" href="/private">Profile</a>
+          {{else}}
+           <a class="nav-link" href="/profile">Profile</a>
+          {{/if}}
         </li>
       </ul>
     </div>

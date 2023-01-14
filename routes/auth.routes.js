@@ -3,16 +3,18 @@ const router = require("express").Router()
 const bcrypt = require("bcryptjs")
 const saltRounds = 10
 const mongoose = require("mongoose")
-const {isLoggedIn, isLoggedOut} = require('../middleware/route-guard')
+const {isLoggedIn, isLoggedOut} = require('../middleware/route-guard.Js')
 
 // GET route ==> to display the signup form to users
-router.get('/signup',isLoggedOut, (req, res) => res.render('auth/signup'));
-router.get('/login',isLoggedOut, (req, res) => res.render('auth/login'));
+router.get('/signup', (req, res) => res.render('auth/signup'));
+router.get('/login', (req, res) => res.render('auth/login'));
 router.get('/profile', isLoggedIn, (req, res) => res.render('user/user-profile',{userInSession:req.session.currentUser}))
+router.get('/main', isLoggedIn, (req, res) => res.render('index',{userInSession:req.session.currentUser, img:`https://images.pexels.com/photos/617278/pexels-photo-617278.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1`}))
+router.get('/private', isLoggedIn, (req, res) => res.render('user/user-profile',{userInSession:req.session.currentUser, img:`https://static-cse.canva.com/blob/604057/giphy3.gif`}))
 // POST route ==> to process form data
 
 //signup post bcrypt
-router.post("/signup", isLoggedOut,(req,res)=> {
+router.post("/signup", (req,res)=> {
     const {username,password}=req.body
     const regex = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}/;
     //email and password client inputs validation
@@ -45,7 +47,7 @@ router.post("/signup", isLoggedOut,(req,res)=> {
             console.log(error)
 })})
 
-router.post("/login", isLoggedOut,(req,res)=>{
+router.post("/login", (req,res)=>{
 
 const {username, password} = req.body
 if(!username || !password){
@@ -79,5 +81,7 @@ router.post("/logout", isLoggedIn, (req,res)=>{
         res.redirect("login")
     })
 })
+
+
 module.exports = router;
 
