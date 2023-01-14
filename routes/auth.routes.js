@@ -3,16 +3,16 @@ const router = require("express").Router()
 const bcrypt = require("bcryptjs")
 const saltRounds = 10
 const mongoose = require("mongoose")
-
+const {isLoggedIn, isLoggedOut} = require('../middleware/route-guard')
 
 // GET route ==> to display the signup form to users
-router.get('/signup', (req, res) => res.render('auth/signup'));
-router.get('/login', (req, res) => res.render('auth/login'));
-router.get('/profile',  (req, res) => res.render('user/user-profile',{userInSession:req.session.currentUser}))
+router.get('/signup',isLoggedOut, (req, res) => res.render('auth/signup'));
+router.get('/login',isLoggedOut, (req, res) => res.render('auth/login'));
+router.get('/profile', isLoggedIn, (req, res) => res.render('user/user-profile',{userInSession:req.session.currentUser}))
 // POST route ==> to process form data
 
 //signup post bcrypt
-router.post("/signup", (req,res)=> {
+router.post("/signup", isLoggedOut,(req,res)=> {
     const {username,password}=req.body
     const regex = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}/;
     //email and password client inputs validation
@@ -45,7 +45,7 @@ router.post("/signup", (req,res)=> {
             console.log(error)
 })})
 
-router.post("/login", (req,res)=>{
+router.post("/login", isLoggedOut,(req,res)=>{
 
 const {username, password} = req.body
 if(!username || !password){
@@ -73,7 +73,7 @@ User.findOne({username})
 
 })
 
-router.post("/logout", (req,res)=>{
+router.post("/logout", isLoggedIn, (req,res)=>{
     req.session.destroy(error => {
         if(error) next(error)
         res.redirect("login")
