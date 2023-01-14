@@ -8,7 +8,7 @@ const mongoose = require("mongoose")
 // GET route ==> to display the signup form to users
 router.get('/signup', (req, res) => res.render('auth/signup'));
 router.get('/login', (req, res) => res.render('auth/login'));
-router.get('/profile',  (req, res) => res.render('user/user-profile',{userInSection:req.session.currentUser}))
+router.get('/profile',  (req, res) => res.render('user/user-profile',{userInSession:req.session.currentUser}))
 // POST route ==> to process form data
 
 //signup post bcrypt
@@ -50,23 +50,34 @@ router.post("/login", (req,res)=>{
 const {username, password} = req.body
 if(!username || !password){
     res.render("auth/login", {errorMessage: "Please provide both username and password!"})
+    return
 }
 
 User.findOne({username})
 .then(user => {
     if(!user){
-        
-    }else if(){
-
+        //render the error message
+        res.render("auth/login", {errorMessage: "Account doesn't exist, sign up right on signup tab!"})
+        return 
+    }else if(bcrypt.compareSync(password,user.password)){
+        console.log(user)
+        req.session.currentUser = user
+        res.redirect('/profile')
+        return
     }else{
-
+        res.render("auth/login", {errorMessage: "Incorrect password!"})
+        return 
     }
 })
+.catch(error => next(error))
 
 })
 
 router.post("/logout", (req,res)=>{
-    
+    req.session.destroy(error => {
+        if(error) next(error)
+        res.redirect("/login")
+    })
 })
 module.exports = router;
 

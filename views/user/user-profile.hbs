@@ -2,9 +2,10 @@
 
 {{#if userInSession}}
   <h2>Welcome to your profile page: {{ userInSession.username }}!</h2>
-  <button>
-    <a href="/userProfile" class="btn btn-secondary">Reload the page</a>
-  </button>
+
+  <a href="/profile" type="submit" class="btn btn-secondary">Reload the page</a>
+
+    
 {{else}}
   
   <br><p>There is no loged in user!</p>
